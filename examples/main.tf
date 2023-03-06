@@ -29,7 +29,7 @@ module "sg" {
 }
 
 module "compute_instance" {
-  source = "git::https://github.com/agmtr/terraform-yandex-compute.git?ref=v1.0.0"
+  source = "git::https://github.com/agmtr/terraform-yandex-compute.git?ref=v1.0.1"
   name   = "compute-instance"
   image  = data.yandex_compute_image.main.id
   network = {

@@ -52,3 +52,8 @@ variable "provisioner" {
     inline = null
   }
 }
+
+variable "labels" {
+  type    = map(string)
+  default = {}
+}

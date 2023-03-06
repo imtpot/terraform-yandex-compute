@@ -1,5 +1,9 @@
 locals {
   name = var.name != null ? "${var.name}-${random_id.main.hex}" : "instance-${random_id.main.hex}"
+  default_labels = {
+    terraform        = "true"
+    terraform_module = basename(abspath(path.root))
+  }
 }
 
 data "yandex_compute_image" "main" {
@@ -54,6 +58,9 @@ resource "yandex_compute_instance" "main" {
   }
   zone                      = var.zone
   allow_stopping_for_update = true
+
+  labels = merge(local.default_labels, var.labels)
+
   connection {
     user = var.cloud_config.user
     host = self.network_interface[0].nat_ip_address

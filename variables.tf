@@ -28,6 +28,7 @@ variable "network" {
   type = object({
     subnet_id = string
     public_ip = optional(bool, true)
+    security_group_ids = optional(list(string))
   })
 }
 

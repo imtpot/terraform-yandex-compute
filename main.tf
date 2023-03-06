@@ -42,6 +42,7 @@ resource "yandex_compute_instance" "main" {
   }
   network_interface {
     subnet_id = var.network.subnet_id
+    security_group_ids = var.network.security_group_ids
     nat       = var.network.public_ip
   }
   platform_id = var.resources.platform_id

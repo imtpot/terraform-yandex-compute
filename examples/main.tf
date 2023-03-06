@@ -12,7 +12,7 @@ module "vpc" {
 }
 
 module "sg" {
-  source               = "git::https://github.com/agmtr/terraform-yandex-sg.git?ref=v1.0.0"
+  source               = "git::https://github.com/agmtr/terraform-yandex-sg.git?ref=v1.0.1"
   network_id           = module.vpc.id
   enable_default_rules = {
     egress_any = true
@@ -29,7 +29,7 @@ module "sg" {
 }
 
 module "compute_instance" {
-  source = "git::https://github.com/agmtr/terraform-yandex-compute.git?ref=v1.0.1"
+  source = "git::https://github.com/agmtr/terraform-yandex-compute.git?ref=v1.0.2"
   name   = "compute-instance"
   image  = data.yandex_compute_image.main.id
   network = {

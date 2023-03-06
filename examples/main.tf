@@ -7,7 +7,7 @@ data "yandex_compute_image" "main" {
 }
 
 module "vpc" {
-  source                 = "git::https://github.com/agmtr/terraform-yandex-vpc.git?ref=v1.0.2"
+  source                 = "git::https://github.com/agmtr/terraform-yandex-vpc.git?ref=v1.0.1"
   create_default_subnets = true
 }
 

@@ -67,7 +67,8 @@ resource "yandex_compute_instance" "main" {
     host = self.network_interface[0].nat_ip_address
   }
 
-  provisioner "remote-exec" {
-    inline = var.provisioner.inline
-  }
+#  provisioner "remote-exec" {
+#    count = length(var.provisioner.inline)
+#    inline = var.provisioner.inline
+#  }
 }

@@ -45,14 +45,14 @@ variable "zone" {
   type = string
 }
 
-variable "provisioner" {
-  type = object({
-    inline = list(string)
-  })
-  default = {
-    inline = null
-  }
-}
+#variable "provisioner" {
+#  type = object({
+#    inline = list(string)
+#  })
+#  default = {
+#    inline = null
+#  }
+#}
 
 variable "labels" {
   type    = map(string)

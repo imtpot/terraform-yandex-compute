@@ -1,10 +1,10 @@
 variable "name" {
-  type = string
+  type    = string
   default = null
 }
 
 variable "desc" {
-  type = string
+  type    = string
   default = null
 }
 
@@ -19,15 +19,23 @@ variable "resources" {
   default = {}
 }
 
-variable "image" {
-  type = string
-  default = "almalinux-8"
+variable "boot_disk" {
+  type = object({
+    image_id = string
+    type     = optional(string, "network-hdd")
+    size     = optional(number, 20)
+  })
+  default = {
+    image_id = ""
+    type     = "network-hdd"
+    size     = 20
+  }
 }
 
 variable "network" {
   type = object({
-    subnet_id = string
-    public_ip = optional(bool, true)
+    subnet_id          = string
+    public_ip          = optional(bool, true)
     security_group_ids = optional(list(string))
   })
 }
@@ -37,8 +45,15 @@ variable "cloud_config" {
     template_file = optional(string, "./templates/cloud-init.tftpl")
     user          = optional(string, "cloud-user")
     pub_key_file  = optional(string, "~/.ssh/id_rsa.pub")
+    extra_config  = object({
+      content_type = optional(string),
+      filename     = optional(string),
+      content      = optional(string)
+    })
   })
-  default = {}
+  default = {
+    extra_config = {}
+  }
 }
 
 variable "zone" {

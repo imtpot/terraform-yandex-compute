@@ -1,34 +1,30 @@
 locals {
-  name = var.name != null ? "${var.name}-${random_id.main.hex}" : "instance-${random_id.main.hex}"
+  name           = var.name != null ? "${var.name}-${random_id.main.hex}" : "instance-${random_id.main.hex}"
   default_labels = {
     terraform        = "true"
     terraform_module = basename(abspath(path.root))
   }
 }
 
-data "yandex_compute_image" "main" {
-  image_id = var.image
-}
-
 resource "random_id" "main" {
   byte_length = 4
 }
 
- data "cloudinit_config" "main" {
-   gzip          = false
-   base64_encode = false
+data "cloudinit_config" "main" {
+  gzip          = false
+  base64_encode = false
 
-   part {
-     content_type = "text/cloud-config"
-     content = templatefile(
-       "${path.module}/${var.cloud_config.template_file}",
-       {
-         user    = var.cloud_config.user,
-         pub_key = file(var.cloud_config.pub_key_file)
-       }
-     )
-   }
- }
+  part {
+    content_type = "text/cloud-config"
+    content      = templatefile(
+      "${path.module}/${var.cloud_config.template_file}",
+      {
+        user    = var.cloud_config.user,
+        pub_key = file(var.cloud_config.pub_key_file)
+      }
+    )
+  }
+}
 
 resource "yandex_compute_instance" "main" {
   name        = local.name
@@ -37,13 +33,15 @@ resource "yandex_compute_instance" "main" {
   hostname = local.name
   boot_disk {
     initialize_params {
-      image_id = data.yandex_compute_image.main.id
+      image_id = var.boot_disk.image_id
+      type     = var.boot_disk.type
+      size     = var.boot_disk.size
     }
   }
   network_interface {
-    subnet_id = var.network.subnet_id
+    subnet_id          = var.network.subnet_id
     security_group_ids = var.network.security_group_ids
-    nat       = var.network.public_ip
+    nat                = var.network.public_ip
   }
   platform_id = var.resources.platform_id
   resources {
@@ -67,8 +65,8 @@ resource "yandex_compute_instance" "main" {
     host = self.network_interface[0].nat_ip_address
   }
 
-#  provisioner "remote-exec" {
-#    count = length(var.provisioner.inline)
-#    inline = var.provisioner.inline
-#  }
+  #  provisioner "remote-exec" {
+  #    count = length(var.provisioner.inline)
+  #    inline = var.provisioner.inline
+  #  }
 }

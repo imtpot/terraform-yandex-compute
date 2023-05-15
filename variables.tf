@@ -45,15 +45,13 @@ variable "cloud_config" {
     template_file = optional(string, "./templates/cloud-init.tftpl")
     user          = optional(string, "cloud-user")
     pub_key_file  = optional(string, "~/.ssh/id_rsa.pub")
-    extra_config  = object({
+    extra_config  = optional(object({
       content_type = optional(string),
       filename     = optional(string),
       content      = optional(string)
-    })
+    }))
   })
-  default = {
-    extra_config = {}
-  }
+  default = {}
 }
 
 variable "zone" {

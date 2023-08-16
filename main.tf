@@ -24,6 +24,14 @@ data "cloudinit_config" "main" {
       }
     )
   }
+  dynamic "part" {
+    for_each = var.cloud_config.extra_config != null ? [1] : []
+    content {
+      content_type = var.cloud_config.extra_config.content_type
+      content = var.cloud_config.extra_config.content_type
+      filename = var.cloud_config.extra_config.filename
+    }
+  }
 }
 
 resource "yandex_compute_instance" "main" {
